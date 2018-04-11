@@ -3,9 +3,8 @@ package ch.texelengine.engine.platform.opengl.context;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import ch.texelengine.engine.api.context.Context;
-import ch.texelengine.engine.api.context.ContextParameters;
-import ch.texelengine.engine.api.context.GraphicsAPI;
+import ch.texelengine.engine.api.context.*;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import java.util.Objects;
@@ -22,36 +21,37 @@ import java.util.Objects;
 public class GLContext extends Context {
 
     /**
-     * Construct a new {@link GLContext} and assign the {@link #pointer} variable.
-     * The {@link #api} is also set to the correct value ({@link GraphicsAPI#OPENGL})
+     * Construct a new graphical {@link Context} object and the associated {@link Window}
+     * object. The created context is automatically made current and is initialized.
+     * The {@link #api} is also set to ({@link GraphicsAPI#OPENGL})
      *
      * <p>
-     * In order for the context to be usable it needs to be made current and to be
-     * initialized
+     * This constructor does NOT initialize {@link GLFW} that is required to create the context/window.
+     * It is better to use the generic {@link Context#create(GraphicsAPI, ContextParameters, WindowParameters)}
      * </p>
      */
-    public GLContext(ContextParameters parameters) {
+    public GLContext(ContextParameters contextParams, WindowParameters windowParams) {
         this.api = GraphicsAPI.OPENGL;
 
-        Objects.requireNonNull(parameters);
+        Objects.requireNonNull(contextParams);
 
         //Set context related parameters
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, parameters.major());
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, parameters.minor());
-        glfwWindowHint(GLFW_CONTEXT_NO_ERROR, parameters.noErrors() ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, contextParams.major());
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, contextParams.minor());
+        glfwWindowHint(GLFW_CONTEXT_NO_ERROR, contextParams.noErrors() ? GLFW_TRUE : GLFW_FALSE);
 
         //Set OpenGL related parameters
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
         //Set the window visibility to false
-        //The window will be shown later during the window initialization
+        //The window will be shown later in the initialization
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        //Create the window/context with a default 200x200 size and no title
-        //These parameters will be changed later during the window initialization
-        this.pointer = glfwCreateWindow(200, 200, "", NULL, NULL);
+        this.makeCurrent();
+
+        this.init();
     }
 
     /**
