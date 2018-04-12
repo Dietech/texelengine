@@ -26,5 +26,11 @@ public class Window {
         this.pointer = pointer;
     }
 
+    /**
+     *
+     */
+    public void destroy() {
+
+    }
 
 }

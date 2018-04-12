@@ -13,15 +13,15 @@ class ContextTest {
 
     @Test
     public void ContextThrowsNullPointerIfAPINull() {
-        assertThrows(NullPointerException.class, () -> Context.create(null, new ContextParameters(1, 1)));
-        assertThrows(NullPointerException.class, () -> Context.create(GraphicsAPI.OPENGL, null));
-        assertThrows(NullPointerException.class, () -> Context.create(null, null));
+        assertThrows(NullPointerException.class, () -> Context.create(null, new ContextParameters(1, 1), WindowParameters.NONE));
+        assertThrows(NullPointerException.class, () -> Context.create(GraphicsAPI.OPENGL, null, WindowParameters.NONE));
+        assertThrows(NullPointerException.class, () -> Context.create(GraphicsAPI.OPENGL, new ContextParameters(1, 1), null));
     }
 
     @Test
     public void MakeCurrentWorks() {
-        Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3));
-        Context context2 = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3));
+        Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3), WindowParameters.NONE);
+        Context context2 = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3), WindowParameters.NONE);
         context.makeCurrent();
         assertEquals(context.pointer, glfwGetCurrentContext());
         context2.makeCurrent();
@@ -30,7 +30,7 @@ class ContextTest {
 
     @Test
     public void DestroyContextWorks() {
-        Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3));
+        Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3), WindowParameters.NONE);
         assertEquals(context.pointer, glfwGetCurrentContext());
         context.destroyContext();
         assertEquals(0, glfwGetCurrentContext());

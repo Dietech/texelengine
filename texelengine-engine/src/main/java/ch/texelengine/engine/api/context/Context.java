@@ -54,11 +54,13 @@ public abstract class Context {
      *
      * @param api the graphics API to use
      *
-     * @throws RuntimeException initialization process fails
+     * @throws IllegalArgumentException the graphics API parameter is invalid
+     * @throws RuntimeException the context creation failed
      *
      * @return the created context
      */
-    public static Context create(GraphicsAPI api, ContextParameters contextParams, WindowParameters windowParams) throws RuntimeException {
+    public static Context create(GraphicsAPI api, ContextParameters contextParams, WindowParameters windowParams)
+            throws IllegalArgumentException, RuntimeException {
 
         //If glfw has not been initialized then do it
         if(!glfwInitialized) {
@@ -82,9 +84,9 @@ public abstract class Context {
                 break;
         }
 
-        //Check if the context is correctly created
-        if (context == null || context.pointer == NULL) {
-            throw new RuntimeException("Failed to create context");
+        //Check if the context is valid
+        if (context == null) {
+            throw new IllegalArgumentException("Invalid API parameter");
         }
 
         return context;
@@ -110,12 +112,11 @@ public abstract class Context {
     }
 
     /**
-     * Initialize the context after creation
-     */
-    protected abstract void init();
-
-    /**
-     * Destroy <code>this</code> context
+     * Destroy <code>this</code> context.
+     *
+     * <p>
+     * The {@link #pointer} is set to NULL
+     * </p>
      */
     public abstract void destroyContext();
 
