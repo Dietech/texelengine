@@ -15,12 +15,17 @@ public class TestMain {
 
         Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3, false), WindowParameters.DEFAULT);
 
+//        context.window().show();
+
         while(true) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            context.window().swapBuffers();
+
+            context.window().pollEvents();
         }
     }
 }

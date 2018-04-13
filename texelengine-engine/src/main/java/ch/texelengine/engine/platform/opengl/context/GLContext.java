@@ -5,6 +5,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import ch.texelengine.engine.api.context.*;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -87,6 +88,9 @@ public class GLContext extends Context {
             throw new RuntimeException("Failed to create context");
         }
 
+        //Set the error callback for the context
+        glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
+
         //Creates the underlying window object
         this.window = new Window(this.pointer);
 
@@ -95,14 +99,14 @@ public class GLContext extends Context {
             glfwSetWindowPos(this.pointer, (mode.width() - width) / 2, (mode.height() - height) / 2);
         }
 
+        //Make the context current
+        this.makeCurrent();
+
         //Set VSync and window visibility
         glfwSwapInterval(windowParams.vsync());
         if(windowParams.visible() == GLFW_TRUE) {
             glfwShowWindow(this.pointer);
         }
-
-        //Make the context current
-        this.makeCurrent();
 
         //Loads the OpenGL natives
         GL.createCapabilities();

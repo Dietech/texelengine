@@ -28,6 +28,15 @@ public interface BufferUtils {
     }
 
     /**
+     *
+     * @param capacity
+     * @return
+     */
+    static FloatBuffer createFloatBuffer(int capacity) {
+        return ByteBuffer.allocateDirect(capacity << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
+    }
+
+    /**
      * Create a {@link IntBuffer} and store the given data array into it
      *
      * @param data the data to store
@@ -38,5 +47,14 @@ public interface BufferUtils {
         buffer.put(data);
         buffer.flip();
         return buffer;
+    }
+
+    /**
+     *
+     * @param capacity
+     * @return
+     */
+    static IntBuffer createIntBuffer(int capacity) {
+        return ByteBuffer.allocateDirect(capacity << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
     }
 }
