@@ -13,3 +13,5 @@ buildNumber.properties
 *.iml
 
 \.idea/
+
+texelengine-engine/src/main/java/ch/texelengine/engine/api/buffers/TestMain\.java

@@ -253,6 +253,16 @@ public class Window {
     }
 
     /**
+     * Move <code>this</code> window to a given position in screen coordinates
+     *
+     * @param xPos the x position of the window in screen coordinates
+     * @param yPos the y position of the window in screen coordinates
+     */
+    public void move(int xPos, int yPos) {
+        glfwSetWindowPos(this.pointer, xPos, yPos);
+    }
+
+    /**
      * Get the current width of <code>this</code> window in screen coordinates
      *
      * @return the current width of the window
@@ -343,7 +353,7 @@ public class Window {
      *
      * @param callback the {@link RestoreCallback} for the window
      */
-    public void onRestored(RestoreCallback callback) {
+    public void onRestore(RestoreCallback callback) {
         this.restoreCallback = callback;
     }
 

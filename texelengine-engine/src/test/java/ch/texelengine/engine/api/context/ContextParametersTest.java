@@ -19,4 +19,16 @@ class ContextParametersTest {
         ContextParameters params = new ContextParameters(3, 2);
         assertEquals(false, params.noErrors());
     }
+
+    @Test
+    public void EqualsWorks() {
+        ContextParameters param1 = new ContextParameters(3, 2, true);
+        ContextParameters param2 = new ContextParameters(3, 2, true);
+        ContextParameters param3 = new ContextParameters(2, 2, false);
+        assertEquals(true, param1.equals(param1));
+        assertEquals(true, param2.equals(param1));
+        assertEquals(false, param1.equals(null));
+        assertEquals(false, param1.equals(new Object()));
+        assertEquals(false, param1.equals(param3));
+    }
 }

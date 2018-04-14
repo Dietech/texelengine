@@ -192,4 +192,26 @@ public class WindowParameters {
     public int visible() {
         return visible ? GLFW_TRUE : GLFW_FALSE;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof WindowParameters) {
+            WindowParameters other = (WindowParameters) obj;
+            return this.fullscreen == other.fullscreen &&
+                   this.visible == other.visible &&
+                   this.resizable == other.resizable &&
+                   this.vsync == other.vsync &&
+                   this.height == other.height &&
+                   this.width == other.width &&
+                   this.title.equals(other.title);
+        } else {
+            return false;
+        }
+    }
 }

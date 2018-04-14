@@ -84,4 +84,22 @@ public class ContextParameters {
     public boolean noErrors() {
         return noErrors;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof ContextParameters) {
+            ContextParameters other = (ContextParameters) obj;
+            return this.noErrors == other.noErrors &&
+                   this.versionMajor == other.versionMajor &&
+                   this.versionMinor == other.versionMinor;
+        } else {
+            return false;
+        }
+    }
 }
