@@ -248,9 +248,7 @@ public class Window {
      *
      * @return the close flag for the window
      */
-    public boolean shouldClose() {
-        return glfwWindowShouldClose(this.pointer);
-    }
+    public boolean shouldClose() { return glfwWindowShouldClose(this.pointer); }
 
     /**
      * Move <code>this</code> window to a given position in screen coordinates
@@ -258,9 +256,7 @@ public class Window {
      * @param xPos the x position of the window in screen coordinates
      * @param yPos the y position of the window in screen coordinates
      */
-    public void move(int xPos, int yPos) {
-        glfwSetWindowPos(this.pointer, xPos, yPos);
-    }
+    public void move(int xPos, int yPos) { glfwSetWindowPos(this.pointer, xPos, yPos); }
 
     /**
      * Get the current width of <code>this</code> window in screen coordinates
@@ -353,9 +349,7 @@ public class Window {
      *
      * @param callback the {@link RestoreCallback} for the window
      */
-    public void onRestore(RestoreCallback callback) {
-        this.restoreCallback = callback;
-    }
+    public void onRestore(RestoreCallback callback) { this.restoreCallback = callback; }
 
     /**
      * Set the framebuffer size callback for <code>this</code> window
