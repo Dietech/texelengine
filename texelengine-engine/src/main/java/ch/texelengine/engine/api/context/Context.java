@@ -7,7 +7,6 @@ import java.util.Objects;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
  * Represents a graphical context that has a pointer

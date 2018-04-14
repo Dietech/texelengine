@@ -15,9 +15,11 @@ public class TestMain {
 
         Context context = Context.create(GraphicsAPI.OPENGL, new ContextParameters(3, 3, false), WindowParameters.DEFAULT);
 
-//        context.window().show();
-
         while(true) {
+            if(context.window().shouldClose()){
+                break;
+            }
+
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -27,5 +29,9 @@ public class TestMain {
 
             context.window().pollEvents();
         }
+
+        context.destroyContext();
+
+        Context.destroy();
     }
 }
