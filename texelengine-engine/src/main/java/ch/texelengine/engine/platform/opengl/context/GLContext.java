@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import ch.texelengine.engine.api.context.*;
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -94,6 +95,9 @@ public class GLContext extends Context {
         //Creates the underlying window object
         this.window = new Window(this.pointer);
 
+        //Creates the input objects
+        this.keyboard = new Keyboard(this.pointer);
+
         //Centers the window if not fullscreen
         if(windowParams.fullscreen() != GLFW_TRUE) {
             glfwSetWindowPos(this.pointer, (mode.width() - width) / 2, (mode.height() - height) / 2);
@@ -117,7 +121,7 @@ public class GLContext extends Context {
      */
     @Override
     public void destroyContext() {
-        this.window.destroy();
+        Callbacks.glfwFreeCallbacks(this.pointer);
         glfwDestroyWindow(this.pointer);
         this.pointer = NULL;
     }

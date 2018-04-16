@@ -4,9 +4,7 @@ import ch.texelengine.engine.platform.opengl.context.GLContext;
 
 import java.util.Objects;
 
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * Represents a graphical context that has a pointer
@@ -42,6 +40,16 @@ public abstract class Context {
      * {@link Window} object attached to <code>this</code> context
      */
     protected Window window;
+
+    /**
+     * {@link Keyboard} object attached to <code>this</code> context
+     */
+    protected Keyboard keyboard;
+
+    /**
+     * {@link Mouse} object attached to <code>this</code> context
+     */
+    protected Mouse mouse;
 
     /**
      * Store whether GLFW has been successfully initialized
@@ -111,6 +119,20 @@ public abstract class Context {
     }
 
     /**
+     * Process the events that occurred in the context
+     *
+     * <p>
+     * Call this method once per frame to update the key/mouse events and window callbacks
+     * </p>
+     */
+    public void pollEvents() {
+        //Update the keyboard inputs
+        keyboard.update();
+
+        glfwPollEvents();
+    }
+
+    /**
      * Destroy <code>this</code> context.
      *
      * <p>
@@ -136,4 +158,18 @@ public abstract class Context {
     public Window window() {
         return this.window;
     }
+
+    /**
+     * Get the {@link Keyboard} attached to <code>this</code> context
+     *
+     * @return the keyboard object
+     */
+    public Keyboard keyboard() { return this.keyboard; }
+
+    /**
+     * Get the {@link Mouse} attached to <code>this</code> context
+     *
+     * @return the mouse object
+     */
+    public Mouse mouse() { return this.mouse; }
 }

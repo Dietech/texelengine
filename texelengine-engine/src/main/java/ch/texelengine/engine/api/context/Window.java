@@ -307,17 +307,6 @@ public class Window {
     }
 
     /**
-     * Processes the pending window events
-     *
-     * <p>
-     * Call this method once per frame.
-     * </p>
-     */
-    public void pollEvents() {
-        glfwPollEvents();
-    }
-
-    /**
      * Set the resize callback for <code>this</code> window
      *
      * @param callback the {@link SizeCallback} for the window
@@ -403,13 +392,6 @@ public class Window {
      */
     public void onDefocus(FocusCallback callback) {
         this.defocusCallback = callback;
-    }
-
-    /**
-     * Destroy the window and free the set callbacks
-     */
-    public void destroy() {
-        Callbacks.glfwFreeCallbacks(this.pointer);
     }
 
     /**
