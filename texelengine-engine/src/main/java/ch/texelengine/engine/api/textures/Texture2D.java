@@ -11,11 +11,6 @@ public abstract class Texture2D extends Texture {
     /**
      *
      */
-    protected int RID;
-
-    /**
-     *
-     */
     protected int width;
 
     /**
@@ -31,9 +26,9 @@ public abstract class Texture2D extends Texture {
      * @param wrapmode
      * @return
      */
-    public Texture2D create(int width, int height, TextureFilter filtering, WrapMode wrapmode) {
+    public static Texture2D create(int width, int height, TextureFormats format, TextureFilters filtering, WrapModes wrapmode) {
         //TODO: switch with context API
-        return new GLTexture2D(width, height, filtering, wrapmode);
+        return new GLTexture2D(width, height, format, filtering, wrapmode);
     }
 
     /**
@@ -44,17 +39,10 @@ public abstract class Texture2D extends Texture {
      * @param wrapmode
      * @return
      */
-    public Texture2D create(String file, TextureLoadOptions loadOptions, TextureFilter filtering, WrapMode wrapmode) {
+    public static Texture2D create(String file, TextureLoadOptions loadOptions, TextureFormats format, TextureFilters filtering, WrapModes wrapmode) {
         //TODO: switch with context API
-        return new GLTexture2D(file, loadOptions, filtering, wrapmode);
+        return new GLTexture2D(file, loadOptions, format, filtering, wrapmode);
     }
-
-    /**
-     *
-     * @param file
-     * @param loadOptions
-     */
-    public abstract void load(String file, TextureLoadOptions loadOptions);
 
     /**
      *
@@ -93,13 +81,5 @@ public abstract class Texture2D extends Texture {
      */
     public int height() {
         return this.height;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int RID() {
-        return RID;
     }
 }

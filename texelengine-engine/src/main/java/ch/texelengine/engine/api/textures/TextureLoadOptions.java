@@ -6,4 +6,13 @@ package ch.texelengine.engine.api.textures;
  */
 public enum TextureLoadOptions {
 
+    /**
+     *
+     */
+    NONE,
+
+    /**
+     *
+     */
+    FLIP_Y
 }

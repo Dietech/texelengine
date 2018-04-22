@@ -39,9 +39,9 @@ public interface GLTextureFilter {
        if(filter != null) {
            switch(filter) {
                case NEAREST:
-                   return GL_NEAREST_MIPMAP_NEAREST;
-               case LINEAR:
                    return GL_NEAREST_MIPMAP_LINEAR;
+               case LINEAR:
+                   return GL_LINEAR_MIPMAP_LINEAR;
                default:
                    return 0;
            }

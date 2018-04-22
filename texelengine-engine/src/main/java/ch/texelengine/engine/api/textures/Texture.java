@@ -9,12 +9,7 @@ public abstract class Texture {
     /**
      *
      */
-    protected TextureFilter filtering;
-
-    /**
-     *
-     */
-    protected WrapMode wrapmode;
+    protected int RID;
 
     /**
      *
@@ -31,4 +26,13 @@ public abstract class Texture {
      *
      */
     public abstract void unbind();
+
+
+    /**
+     *
+     * @return
+     */
+    public int RID() {
+        return RID;
+    }
 }
