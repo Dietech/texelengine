@@ -97,6 +97,7 @@ public class GLContext extends Context {
 
         //Creates the input objects
         this.keyboard = new Keyboard(this.pointer);
+        this.mouse = new Mouse(this.pointer);
 
         //Centers the window if not fullscreen
         if(windowParams.fullscreen() != GLFW_TRUE) {

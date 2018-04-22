@@ -22,13 +22,17 @@ public class Keyboard {
      * Holds a state change for all the keyboard keys
      *
      * <p>
-     * The flag is true for only one frame and is set to false immediately
+     * The flag is <code>true</code> for exactly one frame
      * </p>
      */
     private boolean[] keyChanged;
 
     /**
      * Holds the last state of all the keyboard keys in the GLFW format
+     *
+     * <p>
+     * The values are updated at each call of {@link Context#pollEvents()}
+     * </p>
      */
     private int[] lastKeys;
 
@@ -67,8 +71,10 @@ public class Keyboard {
      * @param mods a bitfield that stores the state of the modifier keys
      */
     private void keyCallback(long window, int key, int scancode, int action, int mods) {
-        keyChanged[key] = lastKeys[key] != action;
-        lastKeys[key] = action;
+        if(key != GLFW_KEY_UNKNOWN) {
+            keyChanged[key] = lastKeys[key] != action;
+            lastKeys[key] = action;
+        }
     }
 
     /**

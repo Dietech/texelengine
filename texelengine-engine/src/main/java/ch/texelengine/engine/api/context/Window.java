@@ -3,6 +3,7 @@ package ch.texelengine.engine.api.context;
 import ch.texelengine.engine.api.buffers.BufferUtils;
 import ch.texelengine.engine.api.context.callbacks.*;
 import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFWDropCallback;
 
 import java.nio.IntBuffer;
 
@@ -135,6 +136,15 @@ public class Window {
     private RefreshCallback refreshCallback;
 
     /**
+     * The user-defined {@link DropCallback}
+     *
+     * <p>
+     * Is triggered when files are dropped on the window
+     * </p>
+     */
+    private DropCallback dropCallback;
+
+    /**
      * Construct a new {@link Window} and initialize its {@link #pointer} to a
      * created context. Also sets the callbacks for the window
      *
@@ -165,6 +175,7 @@ public class Window {
         glfwSetWindowRefreshCallback(this.pointer, this::refreshCallback);
         glfwSetWindowMaximizeCallback(this.pointer, this::maximizeCallback);
         glfwSetWindowFocusCallback(this.pointer, this::focusCallback);
+        glfwSetDropCallback(this.pointer, this::dropCallback);
     }
 
     /**
@@ -395,6 +406,15 @@ public class Window {
     }
 
     /**
+     * Set the file drop callback for <code>this</code> window
+     *
+     * @param callback the {@link DropCallback} for the window
+     */
+    public void onFileDrop(DropCallback callback) {
+        this.dropCallback = callback;
+    }
+
+    /**
      * Size callback method for <code>this</code> window
      *
      * @param window the pointer to the GLFW context
@@ -524,7 +544,7 @@ public class Window {
     }
 
     /**
-     * Focus callback method rof <code>this</code> window
+     * Focus callback method for <code>this</code> window
      *
      * @param window the pointer to the GLFW context
      * @param focused the flag that defines whether the window was focused or defocused
@@ -542,6 +562,25 @@ public class Window {
             if(this.defocusCallback != null) {
                 this.defocusCallback.invoke();
             }
+        }
+    }
+
+    /**
+     * File drop callback function for <code>this</code> window
+     *
+     * @param window the pointer to the GLFW context
+     * @param count the number of files dropped
+     * @param names the pointer to the <code>UTF-8</code> array of file names
+     */
+    private void dropCallback(long window, int count, long names) {
+        String[] files = new String[count];
+        for(int i = 0; i < count; i++) {
+            files[i] = GLFWDropCallback.getName(names, i);
+        }
+
+        //Triggers the user-defined callback
+        if(dropCallback != null) {
+            dropCallback.invoke(files);
         }
     }
 }
