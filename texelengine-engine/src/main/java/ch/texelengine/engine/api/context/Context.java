@@ -128,6 +128,8 @@ public abstract class Context {
     public void pollEvents() {
         //Update the keyboard inputs
         keyboard.update();
+        //Update the mouse inputs
+        mouse.update();
 
         glfwPollEvents();
     }
