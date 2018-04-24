@@ -5,15 +5,18 @@ import ch.texelengine.engine.api.textures.TextureFilters;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * Interface that provide functions to get OpenGL specific information about
+ * texture filters
  *
  * @author Dorian
  */
 public interface GLTextureFilter {
 
     /**
+     * Get the type id of the {@link TextureFilters} in an OpenGL context
      *
-     * @param filter
-     * @return
+     * @param filter the filter option to evaluate
+     * @return the OpenGL id of the specified filter option
      */
     static int filterOf(TextureFilters filter) {
         if(filter != null) {
@@ -31,9 +34,10 @@ public interface GLTextureFilter {
     }
 
     /**
+     * Get the type id of the mipmap {@link TextureFilters} in an OpenGL context
      *
-     * @param filter
-     * @return
+     * @param filter the filter option to evaluate
+     * @return the OpenGL id of the specified mipmap filter option
      */
     static int mipmapFilterOf(TextureFilters filter) {
        if(filter != null) {

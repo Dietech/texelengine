@@ -15,27 +15,33 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.stb.STBImage.*;
 
 /**
+ * Represents an OpenGL 2D texture object
  *
- * @author Dorian
+ * <p>
+ * This is the implementation of the {@link Texture2D} class for the OpenGL platform
+ * </p>
+ *
+ * @author Dorian Ros
  */
 public class GLTexture2D extends Texture2D {
 
     /**
-     *
+     * Maximum number of texture unit on the current driver
      */
     private static int maxTextureUnits = 0;
 
     /**
-     *
+     * Current unit index that the texture is bound to
      */
     private int currentUnit;
 
     /**
+     * Construct a new empty {@link GLTexture2D} object with a format and dimensions
      *
-     * @param width
-     * @param height
-     * @param filtering
-     * @param wrapmode
+     * @param width the width of the image in pixels
+     * @param height the height of the image in pixels
+     * @param filtering the filtering option of the texture
+     * @param wrapmode the wrap mode of the texture
      */
     public GLTexture2D(int width, int height, TextureFormats format, TextureFilters filtering, WrapModes wrapmode) {
         this.currentUnit = 0;
@@ -45,11 +51,12 @@ public class GLTexture2D extends Texture2D {
     }
 
     /**
+     * Construct a new {@link GLTexture2D} object and loads an image file into it
      *
-     * @param file
-     * @param loadOptions
-     * @param filtering
-     * @param wrapmode
+     * @param file the file path of the image file to load
+     * @param loadOptions the load options for STB
+     * @param filtering the filtering option of the texture
+     * @param wrapmode the wrap mode of the texture
      */
     public GLTexture2D(String file, TextureLoadOptions loadOptions, TextureFormats format, TextureFilters filtering, WrapModes wrapmode) {
         this.currentUnit = 0;
@@ -57,13 +64,14 @@ public class GLTexture2D extends Texture2D {
     }
 
     /**
+     * Create an OpenGL texture and Load an image file into it
      *
-     * @param file
-     * @param loadOptions
-     * @param format
-     * @param filtering
-     * @param wrapmode
-     * @return
+     * @param file the image file path
+     * @param loadOptions the load options for STB
+     * @param format the format of the texture
+     * @param filtering the filtering option of the texture
+     * @param wrapmode the wrap mode of the texture
+     * @return the RID of the newly created texture
      */
     private int load(String file, TextureLoadOptions loadOptions, TextureFormats format, TextureFilters filtering, WrapModes wrapmode) {
         int rid = glGenTextures();

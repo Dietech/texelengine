@@ -6,4 +6,5 @@ package ch.texelengine.engine.api.textures;
  */
 public abstract class TextureCube extends Texture {
 
+
 }

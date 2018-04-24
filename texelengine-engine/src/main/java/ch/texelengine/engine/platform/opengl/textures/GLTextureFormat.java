@@ -6,14 +6,18 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 /**
- * @author Dorian Ros
+ * Interface that provide functions to get OpenGL specific information about
+ * texture formats
+ *
+ * @author Dorian
  */
 public interface GLTextureFormat {
 
     /**
+     * Get the type id of the internal format of a {@link TextureFormats} in an OpenGL context
      *
-     * @param format
-     * @return
+     * @param format the format option to evaluate
+     * @return the OpenGL id of the specified internal format option
      */
     static int internalFormatOf(TextureFormats format) {
         if(format != null) {
@@ -39,9 +43,10 @@ public interface GLTextureFormat {
     }
 
     /**
+     * Get the type id of the {@link TextureFormats} in an OpenGL context
      *
-     * @param format
-     * @return
+     * @param format the format option to evaluate
+     * @return the OpenGL id of the specified format option
      */
     static int formatOf(TextureFormats format) {
         if(format != null) {
@@ -63,9 +68,10 @@ public interface GLTextureFormat {
     }
 
     /**
+     * Get the type id of the data type of a {@link TextureFormats} in an OpenGL context
      *
-     * @param format
-     * @return
+     * @param format the format option to evaluate
+     * @return the OpenGL id of the specified format data type
      */
     static int typeOf(TextureFormats format) {
         if(format != null) {
@@ -87,9 +93,10 @@ public interface GLTextureFormat {
     }
 
     /**
+     * Get the number of channels of a {@link TextureFormats} in an OpenGL context
      *
-     * @param format
-     * @return
+     * @param format the format option to evaluate
+     * @return the number of channels of the specified format option
      */
     static int strideOf(TextureFormats format) {
         if(format != null) {
