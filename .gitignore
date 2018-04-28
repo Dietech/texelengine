@@ -17,3 +17,5 @@ buildNumber.properties
 texelengine-engine/src/main/java/ch/texelengine/engine/api/buffers/TestMain\.java
 
 texelengine-engine/src/main/java/ch/texelengine/engine/TestMain\.java
+
+texelengine-engine/src/main/resources/
