@@ -24,6 +24,7 @@ public class Scene {
      */
     public Scene(Node root) {
         this.root = root;
+        this.root.setScene(this);
     }
 
     /**
