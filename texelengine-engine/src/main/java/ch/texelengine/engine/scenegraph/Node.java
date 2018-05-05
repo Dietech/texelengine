@@ -18,7 +18,7 @@ public abstract class Node {
     /**
      * Parent node of <code>this</code> node
      */
-    private Node parent;
+    protected Node parent;
 
     /**
      * List of child nodes of <code>this</code> node
@@ -105,29 +105,31 @@ public abstract class Node {
      * automatically notifies all of the nodes of the tree below
      * </p>
      */
-    protected void notifyChanged(ChangeType change) {
-        //Process the change event internally
-        processChange(change);
+    protected abstract void notifyChanged(ChangeType change);
 
-        //notify the descendants
+    /**
+     *
+     * @param change
+     */
+    protected void notifyChildren(ChangeType change) {
         for(Node child : this.children) {
             child.notifyChanged(change);
         }
     }
 
     /**
-     * Process a change event locally
      *
-     * <p>
-     * It is not recommended to make anything
-     * resource intensive in this function but rather
-     * to set flags in the node and do the hard work
-     * during the update function
-     * </p>
-     *
-     * @param change the change event type as a {@link ChangeType}
+     * @param type
+     * @param <T>
+     * @return
      */
-    protected abstract void processChange(ChangeType change);
+    public <T extends Node> T castTo(Class<T> type) {
+        try {
+            return type.cast(this);
+        } catch(ClassCastException cce) {
+            return null;
+        }
+    }
 
     /**
      * Set the {@Scene} that owns <code>this</code> node
@@ -142,7 +144,7 @@ public abstract class Node {
      */
     protected void setScene(Scene scene) {
         //Check if the scene is not already set to the correct value
-        if(!this.scene.equals(scene)) {
+        if(this.scene != null && !this.scene.equals(scene)) {
             this.scene = scene;
 
             //Update the descendants
