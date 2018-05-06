@@ -108,8 +108,9 @@ public abstract class Node {
     protected abstract void notifyChanged(ChangeType change);
 
     /**
+     * Notify the child nodes of an event type
      *
-     * @param change
+     * @param change the type of change event that occurred
      */
     protected void notifyChildren(ChangeType change) {
         for(Node child : this.children) {
@@ -118,10 +119,11 @@ public abstract class Node {
     }
 
     /**
+     * Try to cast <code>this</code> node to a node of a different type
      *
-     * @param type
-     * @param <T>
-     * @return
+     * @param type the type of the node to try to cast this node to
+     * @param <T> a type that extends the base {@link Node} class
+     * @return the casted node or null if the cast is invalid
      */
     public <T extends Node> T castTo(Class<T> type) {
         try {
