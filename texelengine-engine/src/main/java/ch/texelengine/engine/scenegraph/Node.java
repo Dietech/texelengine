@@ -1,7 +1,12 @@
 package ch.texelengine.engine.scenegraph;
 
+import ch.texelengine.engine.scenegraph.nodes.Spatial;
+import com.google.gson.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static ch.texelengine.engine.scenegraph.ChangeType.PARENT;
 
 /**
  * Represent a node in a {@link Scene}
@@ -9,6 +14,7 @@ import java.util.List;
  * <p>
  * This class the base class for every type of node that are
  * present in the engine.
+ * A node can be saved to a file and reloaded in the engine in the constructor
  * </p>
  *
  * @author Dorian Ros
@@ -23,7 +29,7 @@ public abstract class Node {
     /**
      * List of child nodes of <code>this</code> node
      */
-    private List<Node> children;
+    protected List<Node> children;
 
     /**
      * The {@link Scene} that owns this node
@@ -32,7 +38,7 @@ public abstract class Node {
      * Is null if the node is not part of any scene
      * </p>
      */
-    private Scene scene;
+    protected Scene scene;
 
     /**
      * Construct a new {@link Node} object
@@ -40,6 +46,16 @@ public abstract class Node {
     public Node() {
         this.parent = null;
         this.children = new ArrayList<>();
+    }
+
+    /**
+     * Load a {@link Node} and all of its children from a file
+     *
+     * @param filename the file name to load the node from
+     * @return the newly created node
+     */
+    public static Node loadFromFile(String filename) {
+        throw new RuntimeException("This function is not yet implemented");
     }
 
     /**
@@ -85,6 +101,8 @@ public abstract class Node {
         child.setParent(this);
         //Update the scene object
         child.setScene(this.scene);
+        //Notify the child from parent change
+        child.notifyChanged(PARENT);
     }
 
     /**
@@ -132,6 +150,58 @@ public abstract class Node {
             return null;
         }
     }
+
+    /**
+     * Save <code>this</code> node and all of its children to a file
+     */
+    public String write() {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        JsonElement jsonNode = serialize(gson);
+        return gson.toJson(jsonNode);
+    }
+
+    /**
+     *
+     * @param json
+     * @return
+     */
+    public void read(String json) {
+        JsonParser parser = new JsonParser();
+        JsonElement jsonNode = parser.parse(json).;
+        Node node = deserializeGeneric(jsonNode);
+        addChild(node);
+    }
+
+    /**
+     *
+     * @param gson
+     * @return
+     */
+    public abstract JsonElement serialize(Gson gson);
+
+    /**
+     *
+     * @param element
+     * @return
+     */
+    private Node deserializeGeneric(JsonElement element) {
+        JsonObject object = element.getAsJsonObject();
+        switch(NodeTypes.valueOf(object.get("type").getAsString())) {
+            case SPATIAL:
+                Spatial s = deserialize(element);
+                break;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param jsonElement
+     * @return
+     */
+    public abstract Node deserialize(JsonElement jsonElement);
 
     /**
      * Set the {@Scene} that owns <code>this</code> node

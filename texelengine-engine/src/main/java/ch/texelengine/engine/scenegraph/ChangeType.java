@@ -11,5 +11,10 @@ public enum ChangeType {
     /**
      * Transform changed event
      */
-    TRANSFORM
+    TRANSFORM,
+
+    /**
+     * Parent changed event
+     */
+    PARENT
 }

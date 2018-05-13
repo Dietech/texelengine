@@ -28,9 +28,29 @@ public class Scene {
     }
 
     /**
+     * Construct a new {@link Scene} object and
+     * load its root {@link Node} from a file
+     *
+     * @param filename the file name to load the node from
+     */
+    public Scene(String filename) {
+        this.root = Node.loadFromFile(filename);
+        this.root.setScene(this);
+    }
+
+    /**
      * Update the scene and all the nodes in it
      */
     public void udpate() {
         this.root.updateAll();
+    }
+
+    /**
+     * Save <code>this</code> scene to a file
+     *
+     * @param filename the file path to save the file into
+     */
+    public void saveTo(String filename) {
+        throw new RuntimeException("This function is not yet implemented");
     }
 }
