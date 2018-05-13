@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.texelengine.engine.scenegraph.ChangeType.PARENT;
+import static ch.texelengine.engine.scenegraph.ChangeType.SCENE;
 
 /**
  * Represent a node in a {@link Scene}
@@ -46,16 +47,6 @@ public abstract class Node {
     public Node() {
         this.parent = null;
         this.children = new ArrayList<>();
-    }
-
-    /**
-     * Load a {@link Node} and all of its children from a file
-     *
-     * @param filename the file name to load the node from
-     * @return the newly created node
-     */
-    public static Node loadFromFile(String filename) {
-        throw new RuntimeException("This function is not yet implemented");
     }
 
     /**
@@ -100,7 +91,9 @@ public abstract class Node {
         this.children.add(child);
         child.setParent(this);
         //Update the scene object
-        child.setScene(this.scene);
+        if(this.scene != null) {
+            child.notifyChanged(SCENE);
+        }
         //Notify the child from parent change
         child.notifyChanged(PARENT);
     }
@@ -116,7 +109,7 @@ public abstract class Node {
 
     /**
      * Notify <code>this</code> node and all its children for a state
-     * change
+     * change.
      *
      * <p>
      * This function is recursive so a call to this function from a node
@@ -126,7 +119,7 @@ public abstract class Node {
     protected abstract void notifyChanged(ChangeType change);
 
     /**
-     * Notify the child nodes of an event type
+     * Notify the child nodes of an event type.
      *
      * @param change the type of change event that occurred
      */
@@ -137,7 +130,7 @@ public abstract class Node {
     }
 
     /**
-     * Try to cast <code>this</code> node to a node of a different type
+     * Try to cast <code>this</code> node to a node of a different type.
      *
      * @param type the type of the node to try to cast this node to
      * @param <T> a type that extends the base {@link Node} class
@@ -152,78 +145,117 @@ public abstract class Node {
     }
 
     /**
-     * Save <code>this</code> node and all of its children to a file
+     * Convert <code>this</code> {@link Node} to as JSON string that can be later
+     * converted back to a node object.
+     *
+     * <p>
+     * This method also converts the child nodes
+     * </p>
      */
-    public String write() {
+    public String writeAsJson() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
-        JsonElement jsonNode = serialize(gson);
+        JsonElement jsonNode = serializeInternal(gson);
         return gson.toJson(jsonNode);
     }
 
     /**
+     * Add a child {@link Node} reconstructed from a JSON string
+     * to <code>this</code> node.
      *
-     * @param json
-     * @return
+     * @param json the JSON formatted string. Can be obtained with the {@link #writeAsJson()}
+     *             method
      */
-    public void read(String json) {
+    public void addChildFromJson(String json) {
         JsonParser parser = new JsonParser();
-        JsonElement jsonNode = parser.parse(json).;
-        Node node = deserializeGeneric(jsonNode);
-        addChild(node);
+        JsonElement jsonNode = parser.parse(json);
+        addChild(deserializeGeneric(jsonNode));
     }
 
     /**
+     * Recursive serialization method for <code>this</code>
+     * {@link Node} and its children.
      *
-     * @param gson
-     * @return
+     * <p>
+     * Internal use only
+     * </p>
+     *
+     * @param gson the json serializer object
+     * @return a {@link JsonElement} containing the serialized node
      */
-    public abstract JsonElement serialize(Gson gson);
+    private JsonElement serializeInternal(Gson gson) {
+        JsonObject jsonNode = serialize(gson);
+        JsonArray jsonChildren = new JsonArray();
+        for(Node child : this.children) {
+            jsonChildren.add(child.serializeInternal(gson));
+        }
+        jsonNode.add("children", jsonChildren);
+        return jsonNode;
+    }
 
     /**
+     * Serialize <code>this</code> node to a {@link JsonObject} that can be saved
+     * as a JSON string.
      *
-     * @param element
-     * @return
+     * @param gson the json serializer object
+     * @return the serialized json object
+     */
+    public abstract JsonObject serialize(Gson gson);
+
+    /**
+     * Convert back a {@link JsonElement} to a node of the correct type.
+     *
+     * <p>
+     * In order for the deserialization to know of which type the node is,
+     * a type enum is encoded in the <tt>type</tt> parameter of each
+     * serialized node.
+     * This method also recursively creates the children of the node
+     * </p>
+     *
+     * @param element the json element to deserialize
+     * @return the newly created node
      */
     private Node deserializeGeneric(JsonElement element) {
         JsonObject object = element.getAsJsonObject();
+        Node result;
         switch(NodeTypes.valueOf(object.get("type").getAsString())) {
             case SPATIAL:
-                Spatial s = deserialize(element);
+                result = new Spatial();
+                result.deserialize(element);
                 break;
+
+            default:
+                return null;
         }
-        return null;
+        JsonArray children = object.getAsJsonArray("children");
+        for(int i = 0; i < children.size(); i++) {
+            JsonElement child = children.get(i);
+            result.addChild(deserializeGeneric(child));
+        }
+        return result;
     }
 
     /**
-     *
-     * @param jsonElement
-     * @return
-     */
-    public abstract Node deserialize(JsonElement jsonElement);
-
-    /**
-     * Set the {@Scene} that owns <code>this</code> node
+     * Update <code>this</code> node with the values of the deserialized
+     * {@link JsonElement}.
      *
      * <p>
-     * This method is automatically called when the node is added
-     * to a scene. It is also recursive so the scene is set for this
-     * node and all of its descendants.
+     * This method does not need to bother about the children nodes but only
+     * of the specific node type
      * </p>
      *
-     * @param scene the scene to add the node to
+     * @param jsonElement the JsonElement to get the data from
+     */
+    public abstract void deserialize(JsonElement jsonElement);
+
+    /**
+     * Set the {@link Scene} object of <code>this</code> node
+     *
+     * @param scene the scene object
      */
     protected void setScene(Scene scene) {
-        //Check if the scene is not already set to the correct value
-        if(this.scene != null && !this.scene.equals(scene)) {
-            this.scene = scene;
-
-            //Update the descendants
-            for(Node child : this.children) {
-                child.setScene(scene);
-            }
-        }
+        this.scene = scene;
     }
 
     /**
@@ -235,7 +267,7 @@ public abstract class Node {
      *
      * @return the scene that owns this node
      */
-    protected Scene scene() {
+    public Scene scene() {
         return this.scene;
     }
 }

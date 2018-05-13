@@ -28,14 +28,12 @@ public class Scene {
     }
 
     /**
-     * Construct a new {@link Scene} object and
-     * load its root {@link Node} from a file
+     * Deserialize nodes from a JSON string and add them to the scene
      *
-     * @param filename the file name to load the node from
+     * @param json the JSON string to deserialize
      */
-    public Scene(String filename) {
-        this.root = Node.loadFromFile(filename);
-        this.root.setScene(this);
+    public void loadFromJson(String json) {
+        this.root.addChildFromJson(json);
     }
 
     /**

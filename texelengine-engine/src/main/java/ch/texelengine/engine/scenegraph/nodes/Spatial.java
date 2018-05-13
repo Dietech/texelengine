@@ -89,30 +89,55 @@ public class Spatial extends Node {
             case PARENT:
                 this.spatialParent = this.parent.castTo(Spatial.class);
                 break;
+            case SCENE:
+                this.scene = this.parent.scene();
+                notifyChildren(change);
+                break;
             default:
                 notifyChildren(change);
                 break;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public JsonElement serialize(Gson gson) {
+    public JsonObject serialize(Gson gson) {
         JsonObject jsonSpatial = new JsonObject();
         jsonSpatial.add("type", gson.toJsonTree(SPATIAL));
         jsonSpatial.add("position", gson.toJsonTree(this.local.position()));
         jsonSpatial.add("rotation", gson.toJsonTree(this.local.rotation()));
         jsonSpatial.add("scale", gson.toJsonTree(this.local.scale()));
-        JsonArray children = new JsonArray();
-        for(Node child : this.children) {
-            children.add(child.serialize(gson));
-        }
-        jsonSpatial.add("children", children);
         return jsonSpatial;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Node deserialize(JsonElement jsonElement) {
-        return null;
+    public void deserialize(JsonElement jsonElement) {
+        JsonObject position = jsonElement.getAsJsonObject().get("position").getAsJsonObject();
+        float px = position.get("x").getAsFloat();
+        float py = position.get("y").getAsFloat();
+        float pz = position.get("z").getAsFloat();
+
+        JsonObject rotation = jsonElement.getAsJsonObject().get("rotation").getAsJsonObject();
+        float rx = rotation.get("x").getAsFloat();
+        float ry = rotation.get("y").getAsFloat();
+        float rz = rotation.get("z").getAsFloat();
+        float rw = rotation.get("w").getAsFloat();
+
+        JsonObject scale = jsonElement.getAsJsonObject().get("scale").getAsJsonObject();
+        float sx = scale.get("x").getAsFloat();
+        float sy = scale.get("y").getAsFloat();
+        float sz = scale.get("z").getAsFloat();
+
+        this.local.position().set(px, py, pz);
+        this.local.rotation().set(rx, ry, rz, rw);
+        this.local.scale().set(sx, sy, sz);
+
+        this.localDirty = true;
     }
 
     /**
@@ -124,7 +149,7 @@ public class Spatial extends Node {
      *
      * @return the local transformation matrix
      */
-    protected Matrix4f localTransformation() {
+    public Matrix4f localTransformation() {
         if(this.localDirty) {
             this.local.calculateTransformation();
             this.localDirty = false;
@@ -144,7 +169,7 @@ public class Spatial extends Node {
      *
      * @return the global transformation matrix
      */
-    protected Matrix4f globalTransformation() {
+    public Matrix4f globalTransformation() {
         if(this.globalDirty) {
             //If parent is a spatial
             if(this.spatialParent != null) {

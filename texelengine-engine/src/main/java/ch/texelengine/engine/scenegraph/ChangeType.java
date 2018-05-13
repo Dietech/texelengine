@@ -16,5 +16,10 @@ public enum ChangeType {
     /**
      * Parent changed event
      */
-    PARENT
+    PARENT,
+
+    /**
+     * Scene changed event
+     */
+    SCENE
 }
