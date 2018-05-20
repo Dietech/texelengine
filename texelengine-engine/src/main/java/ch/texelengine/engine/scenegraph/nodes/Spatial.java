@@ -6,11 +6,6 @@ import ch.texelengine.math.linearalgebra.Matrix4f;
 import ch.texelengine.math.linearalgebra.Transform;
 import ch.texelengine.math.linearalgebra.Vector3f;
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ch.texelengine.engine.scenegraph.ChangeType.TRANSFORM;
 import static ch.texelengine.engine.scenegraph.NodeTypes.SPATIAL;

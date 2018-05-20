@@ -1,6 +1,9 @@
 package ch.texelengine.math.linearalgebra;
 
 /**
+ * Represent a transformation in 3D space and can provide
+ * a transformation matrix
+ *
  * @author Dorian Ros
  */
 public class Transform {
@@ -37,7 +40,8 @@ public class Transform {
     }
 
     /**
-     *
+     * Calculate the transformation matrix according to the current position,
+     * rotation and scale parameters
      */
     public void calculateTransformation() {
         this.transform.translationRotationScale(this.position, this.rotation, this.scale);
@@ -64,17 +68,6 @@ public class Transform {
     }
 
     /**
-     * Set the position of <code>this</code> transform object in 3D space
-     *
-     * @param x the new position on the x axis
-     * @param y the new position on the y axis
-     * @param z the new position on the z axis
-     */
-    public void setPosition(float x, float y, float z) {
-        this.position.set(x, y, z);
-    }
-
-    /**
      * Scale <code>this</code> transform object on the 3 axis
      *
      * @param xScale the scale factor on the x axis
@@ -83,18 +76,6 @@ public class Transform {
      */
     public void scale(float xScale, float yScale, float zScale) {
         this.scale.mul(xScale, yScale, zScale);
-    }
-
-    /**
-     * Set the scale of <code>this</code> transform object on the
-     * 3 axis
-     *
-     * @param x the new scale factor on the x axis
-     * @param y the new scale factor on the y axis
-     * @param z the new scale factor on the z axis
-     */
-    public void setScale(float x, float y, float z) {
-        this.scale.set(x, y, z);
     }
 
     /**
@@ -108,26 +89,60 @@ public class Transform {
     }
 
     /**
+     * Get the position vector of <code>this</code> transformation as a {@link Vector3f}
      *
-     * @return
+     * @return the position vector
      */
     public Vector3f position() {
         return this.position;
     }
 
     /**
+     * Get the rotation of <code>this</code> transformation as a {@link Quaternionf}
      *
-     * @return
+     * @return the rotation quaternion
      */
     public Quaternionf rotation() {
         return this.rotation;
     }
 
     /**
+     * Get the scale vector of <code>this</code> transformation as a {@link Vector3f}
      *
-     * @return
+     * @return the scale vector
      */
     public Vector3f scale() {
         return this.scale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof Transform) {
+            Transform other = (Transform) obj;
+            return other.scale.equals(this.scale) &&
+                   other.rotation.equals(this.rotation) &&
+                   other.position.equals(this.position);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Position: " + this.position.toString() +
+               ", Rotation: " + this.rotation.toString() +
+               ", Scale: " + this.rotation.toString();
     }
 }

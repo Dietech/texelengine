@@ -44,11 +44,9 @@ public class Scene {
     }
 
     /**
-     * Save <code>this</code> scene to a file
-     *
-     * @param filename the file path to save the file into
+     * Serialize <code>this</code> scene as a string
      */
-    public void saveTo(String filename) {
-        throw new RuntimeException("This function is not yet implemented");
+    public String asJSON() {
+        return this.root.writeAsJson();
     }
 }
