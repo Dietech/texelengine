@@ -7,14 +7,18 @@ import static org.lwjgl.opengl.GL32.*;
 import static org.lwjgl.opengl.GL43.*;
 
 /**
+ * Interface that provide functions to get OpenGL specific information about
+ * different shader stage types
  *
+ * @author Dorian Ros
  */
 public interface GLShaderType {
 
     /**
+     * Get the OpenGL identifier for a shader stage type
      *
-     * @param type
-     * @return
+     * @param type the shader stage type to get the identifier from
+     * @return the identifier of the given shader stage type or 0 if an error occurred
      */
     static int typeOf(ShaderTypes type) {
         if(type != null) {

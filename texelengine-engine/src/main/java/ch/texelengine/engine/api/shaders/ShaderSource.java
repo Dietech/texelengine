@@ -4,22 +4,36 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * Represent a structure containing the source code of a shader
+ *
+ * <p>
+ * This is used in the {@link Shader} class to provide a simple way to parse
+ * the shader code into the multiple shader stages
+ * </p>
+ *
  * {@author Dorian Ros}
  */
 public class ShaderSource {
 
     /**
-     *
+     * Map of parsed source code and shader stage type
      */
     private Map<ShaderTypes, String> sources;
 
     /**
-     *
+     * Construct a new {@link ShaderSource}
      */
     public ShaderSource() {
         this.sources = new EnumMap<ShaderTypes, String>(ShaderTypes.class);
     }
 
+    /**
+     * Parse the source code for the different shader stages and store the results
+     * in the {@link #sources} map
+     *
+     * @param source the source code of the whole shader
+     * @throws IllegalArgumentException a shader delimiter is invalid
+     */
     public void setFromSource(String source) throws IllegalArgumentException {
         String[] lines = source.split("\\r?\\n");
 
@@ -58,35 +72,43 @@ public class ShaderSource {
     }
 
     /**
+     * Manually add source code for a certain shader stage
      *
-     * @param source
-     * @param type
+     * <p>
+     * Replaces the current shader code for the stage
+     * </p>
+     *
+     * @param source the source code string of the shader stage
+     * @param type the shader stage type
      */
     public void addShaderSource(String source, ShaderTypes type) {
         this.sources.put(type, source);
     }
 
     /**
+     * Check if <code>this</code> shader has source code for a certain stage
      *
-     * @param type
-     * @return
+     * @param type shader stage type to check against
+     * @return whether the shader has source code for the stage type
      */
     public boolean hasSource(ShaderTypes type) {
         return this.sources.containsKey(type);
     }
 
     /**
+     * Get the source code for a certain shader stage type
      *
-     * @param type
-     * @return
+     * @param type the type to get the source code from
+     * @return the source code string
      */
     public String getSource(ShaderTypes type) {
         return this.sources.get(type);
     }
 
     /**
+     * Get the {@link #sources} parameter of <code>this</code> shader source
      *
-     * @return
+     * @return the map of sources and stage types
      */
     public Map<ShaderTypes, String> sources() {
         return this.sources;
